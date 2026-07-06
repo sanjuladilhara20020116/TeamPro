@@ -5,6 +5,13 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const connectDB = require("./config/db");
 
+// Import routes
+
+const authRoutes = require("./routes/authRoutes");
+const projectRoutes = require("./routes/projectRoutes");
+const reportRoutes = require("./routes/reportRoutes");
+const dashboardRoutes = require("./routes/dashboardRoutes");
+
 // Load environment variables from .env file
 dotenv.config();
 
@@ -28,6 +35,34 @@ app.use(express.json());
 // Test route to check backend is working
 app.get("/", (req, res) => {
   res.send("TeamPro API is running...");
+});
+
+
+
+
+// Authentication API routes
+app.use("/api/auth", authRoutes);
+
+// Project/category API routes
+app.use("/api/projects", projectRoutes);
+
+// Weekly report API routes
+app.use("/api/reports", reportRoutes);
+
+// Manager dashboard API routes
+app.use("/api/dashboard", dashboardRoutes);
+
+
+
+
+
+
+// Handle wrong API routes
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: "API route not found",
+  });
 });
 
 // Get port number from .env file
