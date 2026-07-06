@@ -6,7 +6,9 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 
 // Import routes
+
 const authRoutes = require("./routes/authRoutes");
+const projectRoutes = require("./routes/projectRoutes");
 
 // Load environment variables from .env file
 dotenv.config();
@@ -33,8 +35,19 @@ app.get("/", (req, res) => {
   res.send("TeamPro API is running...");
 });
 
+
+
+
 // Authentication API routes
 app.use("/api/auth", authRoutes);
+
+// Project/category API routes
+app.use("/api/projects", projectRoutes);
+
+
+
+
+
 
 // Handle wrong API routes
 app.use((req, res) => {
