@@ -10,6 +10,7 @@ const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const projectRoutes = require("./routes/projectRoutes");
 const reportRoutes = require("./routes/reportRoutes");
+const dashboardRoutes = require("./routes/dashboardRoutes");
 
 // Load environment variables from .env file
 dotenv.config();
@@ -47,6 +48,9 @@ app.use("/api/projects", projectRoutes);
 
 // Weekly report API routes
 app.use("/api/reports", reportRoutes);
+
+// Manager dashboard API routes
+app.use("/api/dashboard", dashboardRoutes);
 
 
 
