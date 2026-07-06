@@ -4,6 +4,10 @@ const {
   getTeamReports,
   getSubmissionStatus,
   getDashboardFilters,
+  getDashboardSummary,
+  getTasksTrend,
+  getProjectWorkload,
+  getRecentActivity,
 } = require("../controllers/dashboardController");
 
 const {
@@ -25,5 +29,17 @@ router.get("/submission-status", getSubmissionStatus);
 
 // Get members and projects for frontend filters
 router.get("/filters", getDashboardFilters);
+
+// Get manager dashboard summary cards
+router.get("/summary", getDashboardSummary);
+
+// Get task completed trend chart data
+router.get("/tasks-trend", getTasksTrend);
+
+// Get workload distribution chart data
+router.get("/project-workload", getProjectWorkload);
+
+// Get recent report activity feed
+router.get("/recent-activity", getRecentActivity);
 
 module.exports = router;
