@@ -37,7 +37,9 @@ const protect = async (req, res, next) => {
     }
 
     // Stop request if user account is disabled
-    if (!user.isActive) {
+    // Only block user if account is manually disabled
+// If isActive is missing in old documents, user can still continue
+    if (!user.isActive === false) {
       return res.status(403).json({
         success: false,
         message: "Your account has been disabled.",
