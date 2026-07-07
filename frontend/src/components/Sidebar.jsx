@@ -1,5 +1,4 @@
 import {
-  BarChart3,
   ClipboardList,
   FolderKanban,
   History,
@@ -13,7 +12,6 @@ import { useAuth } from "../context/AuthContext";
 export default function Sidebar() {
   const { user, logout } = useAuth();
 
-  // Manager links
   const managerLinks = [
     {
       name: "Dashboard",
@@ -32,7 +30,6 @@ export default function Sidebar() {
     },
   ];
 
-  // Team member links
   const memberLinks = [
     {
       name: "Dashboard",
@@ -51,7 +48,6 @@ export default function Sidebar() {
     },
   ];
 
-  // Select links based on user role
   const links =
     user?.role === "manager" || user?.role === "admin"
       ? managerLinks
@@ -60,17 +56,14 @@ export default function Sidebar() {
   return (
     <aside className="fixed left-0 top-0 z-40 hidden h-screen w-72 flex-col bg-slate-950 text-white shadow-2xl lg:flex">
       {/* Logo section */}
-      <div className="border-b border-white/10 px-7 py-6">
-        <div className="flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-cyan-400 shadow-lg">
-            <BarChart3 size={24} />
-          </div>
-
-          <div>
-            <h1 className="text-xl font-bold tracking-tight">TeamPro</h1>
-            <p className="text-xs text-slate-400">Weekly Report System</p>
-          </div>
-        </div>
+      <div className="border-b border-white/10 px-5 py-6">
+        <NavLink to="/" className="flex items-center justify-center">
+          <img
+            src="/images/teamproLogo2.png"
+            alt="TeamPro Logo"
+            className="h-20 w-64 object-contain"
+          />
+        </NavLink>
       </div>
 
       {/* User card */}
