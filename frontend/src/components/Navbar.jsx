@@ -77,17 +77,12 @@ export default function Navbar({ title, subtitle, variant = "dashboard" }) {
 
           {/* Show logo only on home page */}
           {isHomeStyle ? (
-            <Link to="/" className="flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-600 to-cyan-500 font-bold text-white shadow-lg">
-                T
-              </div>
-
-              <div>
-                <h1 className="text-lg font-bold text-white">TeamPro</h1>
-                <p className="text-xs text-slate-400">
-                  Weekly Report System
-                </p>
-              </div>
+            <Link to="/" className="flex items-center">
+              <img
+                src="/images/teamproLogo2.png"
+                alt="TeamPro Logo"
+                className="h-20 w-auto object-contain"
+              />
             </Link>
           ) : (
             title && (
@@ -100,7 +95,7 @@ export default function Navbar({ title, subtitle, variant = "dashboard" }) {
         </div>
 
         {/* Center nav links */}
-        <nav className="hidden flex-1 items-center justify-center gap-8 lg:flex">
+        <nav className="hidden flex-1 items-center justify-center gap-20 lg:flex">
           {visibleLinks.map((link) => {
             const Icon = link.icon;
 
