@@ -59,6 +59,11 @@ const registerUser = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+
+        // Profile fields
+        jobTitle: user.jobTitle || "",
+        department: user.department || "",
+        bio: user.bio || "",
       },
     });
   } catch (error) {
@@ -97,7 +102,7 @@ const loginUser = async (req, res) => {
     }
 
     // Check disabled account status
-    if (!user.isActive === false) {
+    if (user.isActive === false) {
       return res.status(403).json({
         success: false,
         message: "Your account has been disabled",
@@ -126,6 +131,11 @@ const loginUser = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+
+        // Profile fields
+        jobTitle: user.jobTitle || "",
+        department: user.department || "",
+        bio: user.bio || "",
       },
     });
   } catch (error) {
@@ -140,9 +150,13 @@ const loginUser = async (req, res) => {
 // Get current logged-in user profile
 const getMe = async (req, res) => {
   try {
+    const user = await User.findById(req.user._id || req.user.id).select(
+      "-password"
+    );
+
     return res.status(200).json({
       success: true,
-      user: req.user,
+      user,
     });
   } catch (error) {
     return res.status(500).json({

@@ -1,24 +1,24 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { BarChart3, Lock, Mail } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail, Sparkles } from "lucide-react";
 import toast from "react-hot-toast";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
+
+const LOGO_SRC = "/images/teamproLogo2.png";
 
 export default function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  // Form state
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
-  // Loading state for button
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-  // Update input values
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -26,7 +26,6 @@ export default function Login() {
     });
   };
 
-  // Submit login request
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -38,12 +37,9 @@ export default function Login() {
       if (response.data.success) {
         const { token, user } = response.data;
 
-        // Save token and user in auth context
         login(token, user);
-
         toast.success("Login successful");
 
-        // Redirect based on user role
         if (user.role === "manager" || user.role === "admin") {
           navigate("/manager/dashboard");
         } else {
@@ -58,126 +54,149 @@ export default function Login() {
   };
 
   return (
-    <div className="grid min-h-screen bg-slate-50 lg:grid-cols-2">
-      {/* Attractive left side */}
-      <div className="relative hidden overflow-hidden bg-slate-950 lg:block">
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/40 via-cyan-500/20 to-slate-950"></div>
+    <div className="min-h-dvh bg-slate-950">
+      <div className="grid min-h-dvh lg:grid-cols-[1.08fr_0.92fr]">
+        {/* Left visual side */}
+        <section className="relative hidden overflow-hidden lg:flex">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,#22d3ee_0,transparent_32%),radial-gradient(circle_at_bottom_right,#6366f1_0,transparent_36%)] opacity-70" />
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-950/30 via-slate-950/70 to-slate-950" />
 
-        <div className="relative z-10 flex h-full flex-col justify-between p-12 text-white">
-          <div className="flex items-center gap-3">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-xl">
-              <BarChart3 size={28} />
+          <div className="absolute left-16 top-20 h-72 w-72 rounded-full bg-cyan-400/20 blur-3xl" />
+          <div className="absolute bottom-20 right-16 h-80 w-80 rounded-full bg-indigo-500/20 blur-3xl" />
+
+          <div className="relative z-10 flex w-full flex-col justify-between p-10 xl:p-14">
+            
+
+            <div className="mx-auto flex max-w-2xl flex-col items-center text-center">
+              <img
+                src={LOGO_SRC}
+                alt="TeamPro Large Logo"
+                className="mb-10 h-72 w-72 object-contain drop-shadow-[0_30px_80px_rgba(34,211,238,0.45)] xl:h-96 xl:w-96"
+              />
+
+              
+
+              <h2 className="text-4xl font-black leading-tight text-white xl:text-6xl">
+                Track team progress beautifully.
+              </h2>
+
+              <p className="mt-6 max-w-xl text-base leading-8 text-slate-300 xl:text-lg">
+                Submit weekly work, monitor blockers, review reports, and help
+                managers understand team performance with clean dashboards.
+              </p>
             </div>
-            <div>
-              <h1 className="text-2xl font-bold">TeamPro</h1>
-              <p className="text-sm text-slate-300">Weekly Report Dashboard</p>
-            </div>
+
+            
           </div>
+        </section>
 
-          <div>
-            <h2 className="max-w-xl text-5xl font-bold leading-tight">
-              Track weekly work, blockers, and team progress beautifully.
-            </h2>
-            <p className="mt-6 max-w-lg text-lg text-slate-300">
-              A modern dashboard for team members and managers to submit,
-              review, and analyze weekly reports.
-            </p>
-          </div>
+        {/* Form side */}
+        <section className="relative flex items-center justify-center overflow-hidden bg-slate-50 px-4 py-8 sm:px-6 lg:px-10">
+          <div className="absolute right-0 top-0 h-56 w-56 rounded-full bg-cyan-200/50 blur-3xl" />
+          <div className="absolute bottom-0 left-0 h-56 w-56 rounded-full bg-indigo-200/60 blur-3xl" />
 
-          <div className="grid grid-cols-3 gap-4">
-            <div className="rounded-3xl border border-white/10 bg-white/10 p-5 backdrop-blur-xl">
-              <p className="text-3xl font-bold">RBAC</p>
-              <p className="mt-1 text-sm text-slate-300">Secure roles</p>
+          <div className="relative z-10 w-full max-w-md">
+            {/* Mobile logo */}
+            <div className="mb-8 flex flex-col items-center text-center lg:hidden">
+              <img
+                src={LOGO_SRC}
+                alt="TeamPro Logo"
+                className="mb-4 h-28 w-28 object-contain drop-shadow-xl sm:h-32 sm:w-32"
+              />
+              <h1 className="text-3xl font-black text-slate-900">TeamPro</h1>
+              <p className="mt-1 text-sm font-medium text-slate-500">
+                Weekly Report Dashboard
+              </p>
             </div>
 
-            <div className="rounded-3xl border border-white/10 bg-white/10 p-5 backdrop-blur-xl">
-              <p className="text-3xl font-bold">AI</p>
-              <p className="mt-1 text-sm text-slate-300">Assistant ready</p>
+            <div className="mb-7 text-center lg:text-left">
+              <p className="mb-3 inline-flex rounded-full bg-indigo-50 px-4 py-2 text-sm font-bold text-indigo-600">
+                Welcome back
+              </p>
+
+              <h2 className="text-4xl font-black tracking-tight text-slate-950 sm:text-5xl">
+                Login
+              </h2>
+
+              <p className="mt-3 text-base leading-7 text-slate-500">
+                Enter your details to continue to your dashboard.
+              </p>
             </div>
 
-            <div className="rounded-3xl border border-white/10 bg-white/10 p-5 backdrop-blur-xl">
-              <p className="text-3xl font-bold">Charts</p>
-              <p className="mt-1 text-sm text-slate-300">Insights</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Login form side */}
-      <div className="flex items-center justify-center px-6 py-12">
-        <div className="w-full max-w-md">
-          <div className="mb-8 text-center lg:text-left">
-            <h2 className="text-4xl font-bold text-slate-900">
-              Welcome back
-            </h2>
-            <p className="mt-3 text-slate-500">
-              Login to continue to your dashboard.
-            </p>
-          </div>
-
-          <form
-            onSubmit={handleSubmit}
-            className="rounded-3xl border border-slate-200 bg-white p-8 shadow-xl"
-          >
-            <div className="space-y-5">
-              <div>
-                <label className="text-sm font-semibold text-slate-700">
-                  Email Address
-                </label>
-
-                <div className="mt-2 flex items-center gap-3 rounded-2xl border border-slate-200 px-4 py-3 focus-within:border-indigo-500">
-                  <Mail size={18} className="text-slate-400" />
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    placeholder="manager@test.com"
-                    className="w-full outline-none"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="text-sm font-semibold text-slate-700">
-                  Password
-                </label>
-
-                <div className="mt-2 flex items-center gap-3 rounded-2xl border border-slate-200 px-4 py-3 focus-within:border-indigo-500">
-                  <Lock size={18} className="text-slate-400" />
-                  <input
-                    type="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    required
-                    placeholder="123456"
-                    className="w-full outline-none"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="mt-7 w-full rounded-2xl bg-gradient-to-r from-indigo-600 to-cyan-500 px-6 py-3 font-semibold text-white shadow-lg transition hover:shadow-xl disabled:opacity-60"
+            <form
+              onSubmit={handleSubmit}
+              className="rounded-[2rem] border border-white/70 bg-white/90 p-6 shadow-2xl shadow-slate-200/70 backdrop-blur-xl sm:p-8"
             >
-              {loading ? "Logging in..." : "Login"}
-            </button>
+              <div className="space-y-5">
+                <div>
+                  <label className="text-sm font-bold text-slate-700">
+                    Email Address
+                  </label>
 
-            <p className="mt-6 text-center text-sm text-slate-500">
-              No account?{" "}
-              <Link
-                to="/register"
-                className="font-semibold text-indigo-600 hover:text-indigo-700"
+                  <div className="mt-2 flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 transition focus-within:border-indigo-500 focus-within:bg-white focus-within:ring-4 focus-within:ring-indigo-100">
+                    <Mail size={18} className="text-slate-400" />
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      autoComplete="email"
+                      placeholder="manager@test.com"
+                      className="w-full bg-transparent text-slate-800 outline-none placeholder:text-slate-400"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-sm font-bold text-slate-700">
+                    Password
+                  </label>
+
+                  <div className="mt-2 flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 transition focus-within:border-indigo-500 focus-within:bg-white focus-within:ring-4 focus-within:ring-indigo-100">
+                    <Lock size={18} className="text-slate-400" />
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      required
+                      autoComplete="current-password"
+                      placeholder="123456"
+                      className="w-full bg-transparent text-slate-800 outline-none placeholder:text-slate-400"
+                    />
+
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="text-slate-400 transition hover:text-slate-700"
+                    >
+                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="mt-7 w-full rounded-2xl bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 px-6 py-3.5 font-bold text-white shadow-xl shadow-indigo-200 transition hover:-translate-y-0.5 hover:shadow-2xl disabled:cursor-not-allowed disabled:opacity-60"
               >
-                Create account
-              </Link>
-            </p>
-          </form>
-        </div>
+                {loading ? "Logging in..." : "Login"}
+              </button>
+
+              <p className="mt-6 text-center text-sm text-slate-500">
+                No account?{" "}
+                <Link
+                  to="/register"
+                  className="font-bold text-indigo-600 transition hover:text-indigo-700"
+                >
+                  Create account
+                </Link>
+              </p>
+            </form>
+          </div>
+        </section>
       </div>
     </div>
   );
