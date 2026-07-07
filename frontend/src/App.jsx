@@ -11,12 +11,13 @@ import ReportHistory from "./pages/member/ReportHistory";
 import ManagerDashboard from "./pages/manager/ManagerDashboard";
 import TeamReports from "./pages/manager/TeamReports";
 import ProjectManagement from "./pages/manager/ProjectManagement";
+import Home from "./pages/Home";
 
 function App() {
   return (
     <Routes>
       {/* Default route */}
-      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="/" element={<Home />} />
 
       {/* Public routes */}
       <Route path="/login" element={<Login />} />
