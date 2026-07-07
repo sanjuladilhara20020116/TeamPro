@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { BarChart3, Lock, Mail, User } from "lucide-react";
+import { CheckCircle2, Eye, EyeOff, Lock, Mail, User } from "lucide-react";
 import toast from "react-hot-toast";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
+
+const LOGO_SRC = "/images/teamproLogo2.png";
 
 export default function Register() {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  // Form state
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -18,8 +19,8 @@ export default function Register() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-  // Update form input values
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -27,7 +28,6 @@ export default function Register() {
     });
   };
 
-  // Register user
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -39,12 +39,9 @@ export default function Register() {
       if (response.data.success) {
         const { token, user } = response.data;
 
-        // Save token and user after successful registration
         login(token, user);
-
         toast.success("Account created successfully");
 
-        // Redirect based on selected role
         if (user.role === "manager" || user.role === "admin") {
           navigate("/manager/dashboard");
         } else {
@@ -59,152 +56,210 @@ export default function Register() {
   };
 
   return (
-    <div className="grid min-h-screen bg-slate-50 lg:grid-cols-2">
-      {/* Left visual side */}
-      <div className="relative hidden overflow-hidden bg-slate-950 lg:block">
-        <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/30 via-indigo-600/30 to-slate-950"></div>
+    <div className="min-h-dvh bg-slate-950">
+      <div className="grid min-h-dvh lg:grid-cols-[1.08fr_0.92fr]">
+        {/* Left visual side */}
+        <section className="relative hidden overflow-hidden lg:flex">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,#06b6d4_0,transparent_34%),radial-gradient(circle_at_bottom_right,#4f46e5_0,transparent_36%)] opacity-70" />
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-950/20 via-slate-950/70 to-slate-950" />
 
-        <div className="relative z-10 flex h-full flex-col justify-between p-12 text-white">
-          <div className="flex items-center gap-3">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-xl">
-              <BarChart3 size={28} />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold">TeamPro</h1>
-              <p className="text-sm text-slate-300">Work report platform</p>
-            </div>
-          </div>
+          <div className="absolute left-16 top-20 h-72 w-72 rounded-full bg-cyan-400/20 blur-3xl" />
+          <div className="absolute bottom-20 right-16 h-80 w-80 rounded-full bg-indigo-500/20 blur-3xl" />
 
-          <div>
-            <h2 className="max-w-xl text-5xl font-bold leading-tight">
-              Create structured weekly reports for better team visibility.
-            </h2>
-            <p className="mt-6 max-w-lg text-lg text-slate-300">
-              Members submit reports. Managers analyze progress, blockers, and
-              workload using visual dashboards.
-            </p>
-          </div>
+          <div className="relative z-10 flex w-full flex-col justify-between p-10 xl:p-14">
+           
 
-          <div className="rounded-3xl border border-white/10 bg-white/10 p-6 backdrop-blur-xl">
-            <p className="text-sm uppercase tracking-widest text-cyan-200">
-              Assignment Ready
-            </p>
-            <p className="mt-2 text-2xl font-bold">
-              MERN + Tailwind + Dashboard Analytics
-            </p>
-          </div>
-        </div>
-      </div>
+            <div className="mx-auto flex max-w-2xl flex-col items-center text-center">
+              <img
+  src={LOGO_SRC}
+  alt="TeamPro Large Logo"
+  className="mb-10 h-72 w-72 object-contain drop-shadow-[0_30px_80px_rgba(34,211,238,0.45)] xl:h-96 xl:w-96"
+/>
 
-      {/* Register form side */}
-      <div className="flex items-center justify-center px-6 py-12">
-        <div className="w-full max-w-md">
-          <div className="mb-8 text-center lg:text-left">
-            <h2 className="text-4xl font-bold text-slate-900">
-              Create account
-            </h2>
-            <p className="mt-3 text-slate-500">
-              Register as a team member or manager.
-            </p>
-          </div>
+              <h2 className="text-4xl font-black leading-tight text-white xl:text-6xl">
+                Create reports with better visibility.
+              </h2>
 
-          <form
-            onSubmit={handleSubmit}
-            className="rounded-3xl border border-slate-200 bg-white p-8 shadow-xl"
-          >
-            <div className="space-y-5">
-              <div>
-                <label className="text-sm font-semibold text-slate-700">
-                  Full Name
-                </label>
-
-                <div className="mt-2 flex items-center gap-3 rounded-2xl border border-slate-200 px-4 py-3 focus-within:border-indigo-500">
-                  <User size={18} className="text-slate-400" />
-                  <input
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    placeholder="Sanjula Dilhara"
-                    className="w-full outline-none"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="text-sm font-semibold text-slate-700">
-                  Email Address
-                </label>
-
-                <div className="mt-2 flex items-center gap-3 rounded-2xl border border-slate-200 px-4 py-3 focus-within:border-indigo-500">
-                  <Mail size={18} className="text-slate-400" />
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    placeholder="member@test.com"
-                    className="w-full outline-none"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="text-sm font-semibold text-slate-700">
-                  Password
-                </label>
-
-                <div className="mt-2 flex items-center gap-3 rounded-2xl border border-slate-200 px-4 py-3 focus-within:border-indigo-500">
-                  <Lock size={18} className="text-slate-400" />
-                  <input
-                    type="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    required
-                    placeholder="Minimum 6 characters"
-                    className="w-full outline-none"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="text-sm font-semibold text-slate-700">
-                  Role
-                </label>
-
-                <select
-                  name="role"
-                  value={formData.role}
-                  onChange={handleChange}
-                  className="mt-2 w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-indigo-500"
-                >
-                  <option value="member">Team Member</option>
-                  <option value="manager">Manager</option>
-                </select>
-              </div>
+              <p className="mt-6 max-w-xl text-base leading-8 text-slate-300 xl:text-lg">
+                Members submit weekly reports. Managers analyze progress,
+                blockers, and workload using visual dashboard insights.
+              </p>
             </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="mt-7 w-full rounded-2xl bg-gradient-to-r from-indigo-600 to-cyan-500 px-6 py-3 font-semibold text-white shadow-lg transition hover:shadow-xl disabled:opacity-60"
+            
+          </div>
+        </section>
+
+        {/* Form side */}
+        <section className="relative flex items-center justify-center overflow-hidden bg-slate-50 px-4 py-8 sm:px-6 lg:px-10">
+          <div className="absolute right-0 top-0 h-56 w-56 rounded-full bg-cyan-200/50 blur-3xl" />
+          <div className="absolute bottom-0 left-0 h-56 w-56 rounded-full bg-indigo-200/60 blur-3xl" />
+
+          <div className="relative z-10 w-full max-w-md">
+            {/* Mobile logo */}
+            <div className="mb-8 flex flex-col items-center text-center lg:hidden">
+              <img
+                src={LOGO_SRC}
+                alt="TeamPro Logo"
+                className="mb-4 h-28 w-28 object-contain drop-shadow-xl sm:h-32 sm:w-32"
+              />
+              <h1 className="text-3xl font-black text-slate-900">TeamPro</h1>
+              <p className="mt-1 text-sm font-medium text-slate-500">
+                Work Report Platform
+              </p>
+            </div>
+
+            <div className="mb-7 text-center lg:text-left">
+              <p className="mb-3 inline-flex rounded-full bg-cyan-50 px-4 py-2 text-sm font-bold text-cyan-700">
+                Start now
+              </p>
+
+              <h2 className="text-4xl font-black tracking-tight text-slate-950 sm:text-5xl">
+                Create account
+              </h2>
+
+              <p className="mt-3 text-base leading-7 text-slate-500">
+                Register as a team member or manager.
+              </p>
+            </div>
+
+            <form
+              onSubmit={handleSubmit}
+              className="rounded-[2rem] border border-white/70 bg-white/90 p-6 shadow-2xl shadow-slate-200/70 backdrop-blur-xl sm:p-8"
             >
-              {loading ? "Creating account..." : "Create Account"}
-            </button>
+              <div className="space-y-5">
+                <div>
+                  <label className="text-sm font-bold text-slate-700">
+                    Full Name
+                  </label>
 
-            <p className="mt-6 text-center text-sm text-slate-500">
-              Already have an account?{" "}
-              <Link
-                to="/login"
-                className="font-semibold text-indigo-600 hover:text-indigo-700"
+                  <div className="mt-2 flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 transition focus-within:border-indigo-500 focus-within:bg-white focus-within:ring-4 focus-within:ring-indigo-100">
+                    <User size={18} className="text-slate-400" />
+                    <input
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                      autoComplete="name"
+                      placeholder="Sanjula Dilhara"
+                      className="w-full bg-transparent text-slate-800 outline-none placeholder:text-slate-400"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-sm font-bold text-slate-700">
+                    Email Address
+                  </label>
+
+                  <div className="mt-2 flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 transition focus-within:border-indigo-500 focus-within:bg-white focus-within:ring-4 focus-within:ring-indigo-100">
+                    <Mail size={18} className="text-slate-400" />
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      autoComplete="email"
+                      placeholder="member@test.com"
+                      className="w-full bg-transparent text-slate-800 outline-none placeholder:text-slate-400"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-sm font-bold text-slate-700">
+                    Password
+                  </label>
+
+                  <div className="mt-2 flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 transition focus-within:border-indigo-500 focus-within:bg-white focus-within:ring-4 focus-within:ring-indigo-100">
+                    <Lock size={18} className="text-slate-400" />
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      required
+                      autoComplete="new-password"
+                      placeholder="Minimum 6 characters"
+                      className="w-full bg-transparent text-slate-800 outline-none placeholder:text-slate-400"
+                    />
+
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="text-slate-400 transition hover:text-slate-700"
+                    >
+                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-sm font-bold text-slate-700">
+                    Role
+                  </label>
+
+                  <div className="mt-2 grid grid-cols-2 gap-3">
+                    <label
+                      className={`cursor-pointer rounded-2xl border p-4 text-center transition ${
+                        formData.role === "member"
+                          ? "border-indigo-500 bg-indigo-50 text-indigo-700 ring-4 ring-indigo-100"
+                          : "border-slate-200 bg-slate-50 text-slate-600 hover:bg-white"
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="role"
+                        value="member"
+                        checked={formData.role === "member"}
+                        onChange={handleChange}
+                        className="hidden"
+                      />
+                      <span className="text-sm font-black">Team Member</span>
+                    </label>
+
+                    <label
+                      className={`cursor-pointer rounded-2xl border p-4 text-center transition ${
+                        formData.role === "manager"
+                          ? "border-cyan-500 bg-cyan-50 text-cyan-700 ring-4 ring-cyan-100"
+                          : "border-slate-200 bg-slate-50 text-slate-600 hover:bg-white"
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="role"
+                        value="manager"
+                        checked={formData.role === "manager"}
+                        onChange={handleChange}
+                        className="hidden"
+                      />
+                      <span className="text-sm font-black">Manager</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="mt-7 w-full rounded-2xl bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 px-6 py-3.5 font-bold text-white shadow-xl shadow-indigo-200 transition hover:-translate-y-0.5 hover:shadow-2xl disabled:cursor-not-allowed disabled:opacity-60"
               >
-                Login
-              </Link>
-            </p>
-          </form>
-        </div>
+                {loading ? "Creating account..." : "Create Account"}
+              </button>
+
+              <p className="mt-6 text-center text-sm text-slate-500">
+                Already have an account?{" "}
+                <Link
+                  to="/login"
+                  className="font-bold text-indigo-600 transition hover:text-indigo-700"
+                >
+                  Login
+                </Link>
+              </p>
+            </form>
+          </div>
+        </section>
       </div>
     </div>
   );
