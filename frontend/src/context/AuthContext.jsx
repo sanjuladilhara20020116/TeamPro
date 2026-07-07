@@ -18,6 +18,12 @@ export const AuthProvider = ({ children }) => {
     setUser(userData);
   };
 
+  // Update user data after profile edit
+const updateUser = (userData) => {
+  localStorage.setItem("teampro_user", JSON.stringify(userData));
+  setUser(userData);
+};
+
   // Logout user by removing saved session data
   const logout = () => {
     localStorage.removeItem("teampro_token");
@@ -71,6 +77,7 @@ export const AuthProvider = ({ children }) => {
         loading,
         login,
         logout,
+        updateUser,
         isAuthenticated: !!user,
       }}
     >

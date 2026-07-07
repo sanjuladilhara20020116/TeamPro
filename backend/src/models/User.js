@@ -31,6 +31,28 @@ const userSchema = new mongoose.Schema(
       default: "member",
     },
 
+
+    // User job title or position
+jobTitle: {
+  type: String,
+  default: "",
+  trim: true,
+},
+
+// User department or team name
+department: {
+  type: String,
+  default: "",
+  trim: true,
+},
+
+// Short user bio
+bio: {
+  type: String,
+  default: "",
+  trim: true,
+},
+
     // Projects assigned to this user
     assignedProjects: [
       {

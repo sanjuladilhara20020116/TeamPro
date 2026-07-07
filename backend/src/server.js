@@ -12,7 +12,7 @@ const projectRoutes = require("./routes/projectRoutes");
 const reportRoutes = require("./routes/reportRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 const aiRoutes = require("./routes/aiRoutes");
-
+const userRoutes = require("./routes/userRoutes");
 
 // Load environment variables from .env file
 dotenv.config();
@@ -56,6 +56,9 @@ app.use("/api/dashboard", dashboardRoutes);
 
 // AI assistant API routes
 app.use("/api/ai", aiRoutes);
+
+//user routes for profile management
+app.use("/api/users", userRoutes);
 
 
 

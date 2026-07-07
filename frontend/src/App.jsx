@@ -12,6 +12,7 @@ import ManagerDashboard from "./pages/manager/ManagerDashboard";
 import TeamReports from "./pages/manager/TeamReports";
 import ProjectManagement from "./pages/manager/ProjectManagement";
 import Home from "./pages/Home";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -93,7 +94,18 @@ function App() {
 
       {/* Wrong route fallback */}
       <Route path="*" element={<Navigate to="/login" replace />} />
+
+      <Route
+  path="/profile"
+  element={
+    <ProtectedRoute>
+      <Profile />
+    </ProtectedRoute>
+  }
+/>
     </Routes>
+
+    
   );
 }
 
