@@ -27,6 +27,7 @@ import {
 import toast from "react-hot-toast";
 import DashboardLayout from "../../layouts/DashboardLayout";
 import api from "../../api/axios";
+import AIChatWidget from "../../components/AIChatWidget";
 
 export default function ManagerDashboard() {
   // Selected week for dashboard summary
@@ -428,6 +429,10 @@ export default function ManagerDashboard() {
           )}
         </div>
       </div>
+       
+       
+      <AIChatWidget weekStart={weekStart} />
+
     </DashboardLayout>
   );
 }
@@ -496,5 +501,8 @@ function LegendBadge({ color, label }) {
       ></span>
       {label}
     </div>
+
+    
   );
 }
+
