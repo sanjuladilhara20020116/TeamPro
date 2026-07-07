@@ -235,133 +235,215 @@ export default function ProjectManagement() {
       title="Project Management"
       subtitle="Add, edit, delete, and assign team members to projects."
     >
-      {/* Top action section */}
-      <div className="mb-6 flex flex-col gap-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:flex-row md:items-center md:justify-between">
-        <div>
-          <h3 className="text-xl font-bold text-slate-900">
-            Projects / Categories
-          </h3>
-          <p className="mt-1 text-sm text-slate-500">
-            Manage work categories used in weekly reports.
-          </p>
-        </div>
+      <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-indigo-50 via-sky-50 to-cyan-50 p-4 sm:p-6">
+        {/* Background glass decorations */}
+        <div className="pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full bg-indigo-400/20 blur-3xl" />
+        <div className="pointer-events-none absolute -right-24 top-36 h-72 w-72 rounded-full bg-cyan-400/20 blur-3xl" />
+        <div className="pointer-events-none absolute bottom-0 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-violet-400/10 blur-3xl" />
 
-        <button
-          onClick={openCreateModal}
-          className="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-600 to-cyan-500 px-5 py-3 text-sm font-semibold text-white shadow-lg transition hover:shadow-xl"
-        >
-          <Plus size={18} />
-          Add Project
-        </button>
-      </div>
-
-      {/* Project cards */}
-      {loading ? (
-        <div className="flex min-h-[300px] items-center justify-center rounded-3xl border border-slate-200 bg-white">
-          <div className="text-center">
-            <Loader2 className="mx-auto animate-spin text-indigo-600" size={34} />
-            <p className="mt-3 text-sm text-slate-500">
-              Loading projects...
-            </p>
-          </div>
-        </div>
-      ) : projects.length === 0 ? (
-        <div className="rounded-3xl border border-slate-200 bg-white p-12 text-center shadow-sm">
-          <FolderKanban className="mx-auto text-slate-300" size={54} />
-
-          <h3 className="mt-5 text-xl font-bold text-slate-900">
-            No projects created yet
-          </h3>
-
-          <p className="mt-2 text-sm text-slate-500">
-            Create your first project/category for weekly report tagging.
-          </p>
-        </div>
-      ) : (
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {projects.map((project) => (
-            <div
-              key={project._id}
-              className="group rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex items-center gap-4">
-                  <div
-                    className="flex h-14 w-14 items-center justify-center rounded-2xl text-white shadow-lg"
-                    style={{ backgroundColor: project.color }}
-                  >
-                    <FolderKanban size={25} />
-                  </div>
-
-                  <div>
-                    <h3 className="text-lg font-bold text-slate-900">
-                      {project.name}
-                    </h3>
-
-                    <p className="mt-1 text-xs font-medium text-slate-400">
-                      {project.members?.length || 0} assigned members
-                    </p>
-                  </div>
+        <div className="relative z-10">
+          {/* Top action section */}
+          <div className="mb-6 overflow-hidden rounded-[2rem] border border-white/70 bg-white/55 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.10)] backdrop-blur-2xl md:p-7">
+            <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+              <div>
+                <div className="inline-flex items-center gap-2 rounded-full border border-indigo-200/70 bg-white/70 px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-indigo-700 shadow-sm backdrop-blur-xl">
+                  <FolderKanban size={15} />
+                  Project Workspace
                 </div>
 
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => openEditModal(project)}
-                    className="rounded-xl border border-indigo-100 bg-indigo-50 p-2 text-indigo-600 transition hover:bg-indigo-100"
-                  >
-                    <Edit3 size={17} />
-                  </button>
+                <h3 className="mt-4 bg-gradient-to-r from-slate-950 via-indigo-800 to-cyan-700 bg-clip-text text-2xl font-black text-transparent md:text-3xl">
+                  Projects / Categories
+                </h3>
 
-                  <button
-                    onClick={() => handleDeleteProject(project._id)}
-                    className="rounded-xl border border-red-100 bg-red-50 p-2 text-red-600 transition hover:bg-red-100"
-                  >
-                    <Trash2 size={17} />
-                  </button>
-                </div>
+                <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
+                  Manage work categories used in weekly reports with a cleaner,
+                  modern and organized project view.
+                </p>
               </div>
 
-              <p className="mt-5 min-h-[48px] text-sm leading-6 text-slate-500">
-                {project.description || "No description added."}
-              </p>
+              <button
+                onClick={openCreateModal}
+                className="group inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-600 via-violet-600 to-cyan-500 px-5 py-3 text-sm font-bold text-white shadow-[0_18px_40px_rgba(79,70,229,0.35)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_24px_55px_rgba(79,70,229,0.45)]"
+              >
+                <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-white/20 transition group-hover:bg-white/30">
+                  <Plus size={18} />
+                </span>
+                Add Project
+              </button>
+            </div>
 
-              <div className="mt-5 border-t border-slate-100 pt-5">
-                <div className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-                  <Users size={17} />
-                  Assigned Members
-                </div>
+            {/* Small overview cards */}
+            <div className="mt-6 grid gap-4 md:grid-cols-3">
+              <div className="rounded-3xl border border-white/70 bg-white/55 p-4 shadow-sm backdrop-blur-xl">
+                <p className="text-xs font-bold uppercase tracking-widest text-slate-400">
+                  Total Projects
+                </p>
+                <p className="mt-2 text-2xl font-black text-slate-900">
+                  {projects.length}
+                </p>
+              </div>
 
-                {project.members?.length > 0 ? (
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {project.members.map((member) => (
-                      <span
-                        key={member._id}
-                        className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600"
-                      >
-                        {member.name}
-                      </span>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="mt-3 text-sm text-slate-400">
-                    No members assigned.
-                  </p>
-                )}
+              <div className="rounded-3xl border border-white/70 bg-white/55 p-4 shadow-sm backdrop-blur-xl">
+                <p className="text-xs font-bold uppercase tracking-widest text-slate-400">
+                  Team Members
+                </p>
+                <p className="mt-2 text-2xl font-black text-slate-900">
+                  {members.length}
+                </p>
+              </div>
+
+              <div className="rounded-3xl border border-white/70 bg-white/55 p-4 shadow-sm backdrop-blur-xl">
+                <p className="text-xs font-bold uppercase tracking-widest text-slate-400">
+                  Status
+                </p>
+                <p className="mt-2 text-2xl font-black text-emerald-600">
+                  Active
+                </p>
               </div>
             </div>
-          ))}
+          </div>
+
+          {/* Project cards */}
+          {loading ? (
+            <div className="flex min-h-[330px] items-center justify-center rounded-[2rem] border border-white/70 bg-white/55 shadow-[0_20px_60px_rgba(15,23,42,0.10)] backdrop-blur-2xl">
+              <div className="text-center">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-3xl bg-gradient-to-br from-indigo-600 to-cyan-500 shadow-lg">
+                  <Loader2 className="animate-spin text-white" size={34} />
+                </div>
+
+                <p className="mt-4 text-sm font-semibold text-slate-600">
+                  Loading projects...
+                </p>
+              </div>
+            </div>
+          ) : projects.length === 0 ? (
+            <div className="rounded-[2rem] border border-white/70 bg-white/60 p-12 text-center shadow-[0_20px_60px_rgba(15,23,42,0.10)] backdrop-blur-2xl">
+              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-[1.7rem] bg-gradient-to-br from-indigo-100 to-cyan-100 shadow-inner">
+                <FolderKanban className="text-indigo-500" size={54} />
+              </div>
+
+              <h3 className="mt-6 text-2xl font-black text-slate-900">
+                No projects created yet
+              </h3>
+
+              <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500">
+                Create your first project/category for weekly report tagging and
+                team member assignment.
+              </p>
+
+              <button
+                onClick={openCreateModal}
+                className="mt-6 inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-600 to-cyan-500 px-5 py-3 text-sm font-bold text-white shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl"
+              >
+                <Plus size={18} />
+                Create Project
+              </button>
+            </div>
+          ) : (
+            <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+              {projects.map((project) => (
+                <div
+                  key={project._id}
+                  className="group relative overflow-hidden rounded-[2rem] border border-white/70 bg-white/60 p-6 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur-2xl transition duration-300 hover:-translate-y-2 hover:bg-white/75 hover:shadow-[0_30px_75px_rgba(15,23,42,0.14)]"
+                >
+                  <div
+                    className="absolute -right-12 -top-12 h-36 w-36 rounded-full opacity-20 blur-2xl transition group-hover:opacity-30"
+                    style={{ backgroundColor: project.color }}
+                  />
+
+                  <div className="relative z-10">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex items-center gap-4">
+                        <div
+                          className="flex h-16 w-16 items-center justify-center rounded-[1.4rem] text-white shadow-[0_16px_35px_rgba(15,23,42,0.20)] ring-4 ring-white/50"
+                          style={{ backgroundColor: project.color }}
+                        >
+                          <FolderKanban size={27} />
+                        </div>
+
+                        <div>
+                          <h3 className="line-clamp-1 text-lg font-black text-slate-950">
+                            {project.name}
+                          </h3>
+
+                          <p className="mt-1 inline-flex rounded-full bg-slate-900/5 px-3 py-1 text-xs font-bold text-slate-500">
+                            {project.members?.length || 0} assigned members
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-2 opacity-100 transition md:opacity-80 md:group-hover:opacity-100">
+                        <button
+                          onClick={() => openEditModal(project)}
+                          className="rounded-2xl border border-indigo-200/70 bg-indigo-50/80 p-2.5 text-indigo-600 shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5 hover:bg-indigo-100 hover:shadow-md"
+                        >
+                          <Edit3 size={17} />
+                        </button>
+
+                        <button
+                          onClick={() => handleDeleteProject(project._id)}
+                          className="rounded-2xl border border-red-200/70 bg-red-50/80 p-2.5 text-red-600 shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5 hover:bg-red-100 hover:shadow-md"
+                        >
+                          <Trash2 size={17} />
+                        </button>
+                      </div>
+                    </div>
+
+                    <p className="mt-6 min-h-[56px] text-sm leading-6 text-slate-600">
+                      {project.description || "No description added."}
+                    </p>
+
+                    <div className="mt-6 rounded-3xl border border-white/70 bg-white/55 p-4 shadow-sm backdrop-blur-xl">
+                      <div className="flex items-center gap-2 text-sm font-black text-slate-800">
+                        <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-900 text-white">
+                          <Users size={16} />
+                        </span>
+                        Assigned Members
+                      </div>
+
+                      {project.members?.length > 0 ? (
+                        <div className="mt-4 flex flex-wrap gap-2">
+                          {project.members.map((member) => (
+                            <span
+                              key={member._id}
+                              className="rounded-full border border-white/80 bg-gradient-to-r from-slate-50 to-white px-3 py-1.5 text-xs font-bold text-slate-600 shadow-sm"
+                            >
+                              {member.name}
+                            </span>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="mt-4 rounded-2xl bg-slate-100/70 px-4 py-3 text-sm font-medium text-slate-400">
+                          No members assigned.
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-      )}
+      </div>
 
       {/* Add/Edit modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4 backdrop-blur-sm">
-          <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-3xl bg-white shadow-2xl">
-            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white px-6 py-5">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-xl">
+          <div className="pointer-events-none absolute left-10 top-10 h-72 w-72 rounded-full bg-indigo-500/20 blur-3xl" />
+          <div className="pointer-events-none absolute bottom-10 right-10 h-72 w-72 rounded-full bg-cyan-500/20 blur-3xl" />
+
+          <div className="relative max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-[2rem] border border-white/20 bg-white/80 shadow-[0_30px_100px_rgba(0,0,0,0.35)] backdrop-blur-2xl">
+            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-white/60 bg-white/70 px-6 py-5 backdrop-blur-2xl">
               <div>
-                <h3 className="text-xl font-bold text-slate-900">
+                <div className="inline-flex items-center gap-2 rounded-full bg-indigo-50 px-3 py-1 text-xs font-bold uppercase tracking-widest text-indigo-600">
+                  <FolderKanban size={14} />
+                  Project Setup
+                </div>
+
+                <h3 className="mt-2 bg-gradient-to-r from-slate-950 to-indigo-700 bg-clip-text text-2xl font-black text-transparent">
                   {editingProject ? "Edit Project" : "Add New Project"}
                 </h3>
+
                 <p className="mt-1 text-sm text-slate-500">
                   Create project categories and assign team members.
                 </p>
@@ -369,7 +451,7 @@ export default function ProjectManagement() {
 
               <button
                 onClick={closeModal}
-                className="rounded-2xl border border-slate-200 p-2 text-slate-500 transition hover:bg-slate-50"
+                className="rounded-2xl border border-slate-200/80 bg-white/70 p-2.5 text-slate-500 shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-100 hover:text-slate-800"
               >
                 <X size={20} />
               </button>
@@ -378,7 +460,7 @@ export default function ProjectManagement() {
             <div className="space-y-6 p-6">
               {/* Project name */}
               <div>
-                <label className="text-sm font-semibold text-slate-700">
+                <label className="text-sm font-black text-slate-700">
                   Project / Category Name
                 </label>
 
@@ -387,13 +469,13 @@ export default function ProjectManagement() {
                   value={formData.name}
                   onChange={handleChange}
                   placeholder="Example: Internal Tooling"
-                  className="mt-2 w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-indigo-500"
+                  className="mt-2 w-full rounded-2xl border border-white/80 bg-white/70 px-4 py-3 text-sm font-semibold text-slate-800 shadow-sm outline-none backdrop-blur-xl transition placeholder:text-slate-400 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100"
                 />
               </div>
 
               {/* Project description */}
               <div>
-                <label className="text-sm font-semibold text-slate-700">
+                <label className="text-sm font-black text-slate-700">
                   Description
                 </label>
 
@@ -403,46 +485,48 @@ export default function ProjectManagement() {
                   onChange={handleChange}
                   rows={4}
                   placeholder="Short description about this project/category."
-                  className="mt-2 w-full resize-none rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-indigo-500"
+                  className="mt-2 w-full resize-none rounded-2xl border border-white/80 bg-white/70 px-4 py-3 text-sm font-semibold text-slate-800 shadow-sm outline-none backdrop-blur-xl transition placeholder:text-slate-400 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100"
                 />
               </div>
 
               {/* Color picker */}
               <div>
-                <label className="text-sm font-semibold text-slate-700">
+                <label className="text-sm font-black text-slate-700">
                   Project Color
                 </label>
 
-                <div className="mt-3 flex flex-wrap gap-3">
-                  {colorOptions.map((color) => (
-                    <button
-                      key={color}
-                      type="button"
-                      onClick={() =>
-                        setFormData({
-                          ...formData,
-                          color,
-                        })
-                      }
-                      className={`h-10 w-10 rounded-2xl border-4 transition ${
-                        formData.color === color
-                          ? "border-slate-900 scale-110"
-                          : "border-white"
-                      }`}
-                      style={{ backgroundColor: color }}
-                    />
-                  ))}
+                <div className="mt-3 rounded-3xl border border-white/70 bg-white/55 p-4 shadow-sm backdrop-blur-xl">
+                  <div className="flex flex-wrap gap-3">
+                    {colorOptions.map((color) => (
+                      <button
+                        key={color}
+                        type="button"
+                        onClick={() =>
+                          setFormData({
+                            ...formData,
+                            color,
+                          })
+                        }
+                        className={`h-11 w-11 rounded-2xl border-4 shadow-md transition duration-300 hover:scale-110 ${
+                          formData.color === color
+                            ? "scale-110 border-slate-950 ring-4 ring-slate-200"
+                            : "border-white"
+                        }`}
+                        style={{ backgroundColor: color }}
+                      />
+                    ))}
+                  </div>
                 </div>
               </div>
 
               {/* Member assignment */}
               <div>
-                <label className="text-sm font-semibold text-slate-700">
+                <label className="text-sm font-black text-slate-700">
                   Assign Team Members
                 </label>
 
                 {members.length === 0 ? (
-                  <div className="mt-3 rounded-2xl bg-amber-50 p-4 text-sm text-amber-700">
+                  <div className="mt-3 rounded-3xl border border-amber-200/70 bg-amber-50/80 p-4 text-sm font-semibold text-amber-700 shadow-sm backdrop-blur-xl">
                     No team members found. Register member accounts first.
                   </div>
                 ) : (
@@ -455,25 +539,25 @@ export default function ProjectManagement() {
                           key={member._id}
                           type="button"
                           onClick={() => toggleMember(member._id)}
-                          className={`flex items-center justify-between rounded-2xl border px-4 py-3 text-left transition ${
+                          className={`flex items-center justify-between rounded-3xl border px-4 py-3 text-left shadow-sm backdrop-blur-xl transition duration-300 hover:-translate-y-0.5 hover:shadow-md ${
                             selected
-                              ? "border-indigo-200 bg-indigo-50"
-                              : "border-slate-200 bg-white hover:bg-slate-50"
+                              ? "border-indigo-300/80 bg-indigo-50/90 ring-4 ring-indigo-100/70"
+                              : "border-white/80 bg-white/65 hover:bg-white"
                           }`}
                         >
                           <div>
-                            <p className="text-sm font-semibold text-slate-900">
+                            <p className="text-sm font-black text-slate-900">
                               {member.name}
                             </p>
-                            <p className="mt-1 text-xs text-slate-400">
+                            <p className="mt-1 text-xs font-medium text-slate-400">
                               {member.email}
                             </p>
                           </div>
 
                           <span
-                            className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                            className={`rounded-full px-3 py-1.5 text-xs font-black shadow-sm ${
                               selected
-                                ? "bg-indigo-600 text-white"
+                                ? "bg-gradient-to-r from-indigo-600 to-cyan-500 text-white"
                                 : "bg-slate-100 text-slate-500"
                             }`}
                           >
@@ -487,10 +571,10 @@ export default function ProjectManagement() {
               </div>
 
               {/* Action buttons */}
-              <div className="flex justify-end gap-3 border-t border-slate-100 pt-5">
+              <div className="flex justify-end gap-3 border-t border-white/70 pt-5">
                 <button
                   onClick={closeModal}
-                  className="rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                  className="rounded-2xl border border-slate-200/80 bg-white/70 px-5 py-3 text-sm font-black text-slate-700 shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5 hover:bg-white hover:shadow-md"
                 >
                   Cancel
                 </button>
@@ -498,7 +582,7 @@ export default function ProjectManagement() {
                 <button
                   onClick={handleSaveProject}
                   disabled={saving}
-                  className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-600 to-cyan-500 px-5 py-3 text-sm font-semibold text-white shadow-lg transition hover:shadow-xl disabled:opacity-60"
+                  className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-600 via-violet-600 to-cyan-500 px-5 py-3 text-sm font-black text-white shadow-[0_18px_40px_rgba(79,70,229,0.35)] transition hover:-translate-y-0.5 hover:shadow-[0_24px_55px_rgba(79,70,229,0.45)] disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {saving ? (
                     <Loader2 className="animate-spin" size={17} />
