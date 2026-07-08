@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Bot,
   Loader2,
   MessageCircle,
   Send,
   Sparkles,
+  UserRound,
   X,
 } from "lucide-react";
 import toast from "react-hot-toast";
@@ -21,12 +22,15 @@ export default function AIChatWidget({ weekStart }) {
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      text: "Hi, I am TeamPro AI. Ask me about team progress, blockers, workload, or weekly reports.",
+      text: "Hi!!! 👋🏼    I'm TeamPro AI 🤖.                                    Ask me about team progress, blockers, workload, or weekly reports.",
     },
   ]);
 
   // Loading state while waiting for backend AI response
   const [loading, setLoading] = useState(false);
+
+  // Auto scroll chat to latest message
+  const messagesEndRef = useRef(null);
 
   // Suggested manager questions
   const suggestions = [
@@ -35,6 +39,10 @@ export default function AIChatWidget({ weekStart }) {
     "Which project has the highest workload?",
     "What should the manager focus on next?",
   ];
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, loading]);
 
   // Send question to backend AI endpoint
   const sendQuestion = async (customQuestion) => {
@@ -77,24 +85,23 @@ export default function AIChatWidget({ weekStart }) {
           },
         ]);
       }
-   } catch (error) {
-  console.log("AI frontend error:", error.response?.data || error.message);
+    } catch (error) {
+      console.log("AI frontend error:", error.response?.data || error.message);
 
-  const backendMessage =
-    error.response?.data?.error ||
-    error.response?.data?.message ||
-    "AI assistant failed";
+      const backendMessage =
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        "AI assistant failed";
 
-  toast.error(backendMessage);
+      toast.error(backendMessage);
 
-  setMessages((prev) => [
-    ...prev,
-    {
-      role: "assistant",
-      text: backendMessage,
-    },
-  ]);
-
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          text: backendMessage,
+        },
+      ]);
     } finally {
       setLoading(false);
     }
@@ -106,89 +113,156 @@ export default function AIChatWidget({ weekStart }) {
       {!open && (
         <button
           onClick={() => setOpen(true)}
-          className="fixed bottom-6 right-6 z-50 flex h-16 w-16 items-center justify-center rounded-3xl bg-gradient-to-br from-indigo-600 to-cyan-500 text-white shadow-2xl transition hover:scale-105"
+          className="group fixed bottom-6 right-6 z-50 flex h-16 w-16 items-center justify-center rounded-[1.4rem] bg-gradient-to-br from-violet-600 via-fuchsia-500 to-orange-400 text-white shadow-[0_20px_60px_rgba(168,85,247,0.45)] transition-all duration-300 hover:-translate-y-1 hover:scale-105"
         >
-          <MessageCircle size={28} />
+          <span className="absolute inset-0 rounded-[1.4rem] bg-white/20 opacity-0 transition group-hover:opacity-100"></span>
+          <MessageCircle size={29} className="relative z-10" />
         </button>
       )}
 
       {/* Chat widget panel */}
       {open && (
-        <div className="fixed bottom-6 right-6 z-50 flex h-[620px] w-[380px] max-w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl">
+        <div className="fixed bottom-4 right-4 z-50 flex h-[calc(100vh-2rem)] max-h-[720px] w-[430px] max-w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-[2rem] border border-white/50 bg-white/90 shadow-[0_30px_100px_rgba(15,23,42,0.28)] backdrop-blur-2xl md:bottom-6 md:right-6">
           {/* Header */}
-          <div className="flex items-center justify-between bg-gradient-to-r from-indigo-600 to-cyan-500 px-5 py-4 text-white">
-            <div className="flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/20">
-                <Bot size={24} />
+          <div className="relative overflow-hidden bg-gradient-to-br from-violet-950 via-fuchsia-800 to-orange-500 px-5 py-5 text-white">
+            <div className="absolute -right-16 -top-16 h-44 w-44 rounded-full bg-orange-300/35 blur-3xl"></div>
+            <div className="absolute -bottom-24 left-8 h-52 w-52 rounded-full bg-fuchsia-400/35 blur-3xl"></div>
+            <div className="absolute left-1/2 top-0 h-32 w-32 rounded-full bg-white/10 blur-2xl"></div>
+
+            <div className="relative flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                {/* Realistic chatbot header icon */}
+                <div className="relative flex h-14 w-14 items-center justify-center rounded-[1.25rem] border border-white/25 bg-white/15 shadow-2xl backdrop-blur-xl">
+                  <div className="absolute inset-1 rounded-[1rem] bg-gradient-to-br from-white/25 to-white/5"></div>
+
+                  <div className="relative flex h-10 w-10 items-center justify-center rounded-2xl bg-white text-violet-700 shadow-lg">
+                    <Bot size={23} />
+                  </div>
+
+                  <div className="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-xl border border-white/30 bg-orange-400 text-white shadow-md">
+                    <Sparkles size={12} />
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-bold tracking-tight">
+                    TeamPro AI
+                  </h3>
+
+                  <p className="mt-1 text-xs text-orange-50">
+                    Smart manager report assistant
+                  </p>
+                </div>
               </div>
 
-              <div>
-                <h3 className="font-bold">TeamPro AI</h3>
-                <p className="text-xs text-indigo-100">
-                  Manager report assistant
-                </p>
-              </div>
+              <button
+                onClick={() => setOpen(false)}
+                className="rounded-2xl border border-white/10 bg-white/10 p-2.5 text-white transition hover:bg-white/20"
+              >
+                <X size={18} />
+              </button>
             </div>
 
-            <button
-              onClick={() => setOpen(false)}
-              className="rounded-xl bg-white/10 p-2 transition hover:bg-white/20"
-            >
-              <X size={18} />
-            </button>
+            <div className="relative mt-5 rounded-2xl border border-white/10 bg-white/10 p-3 backdrop-blur-xl">
+              <div className="flex items-center gap-2 text-xs text-orange-50">
+                <Sparkles size={14} />
+                <span>
+                  Ask about reports, blockers, workload, progress, and team
+                  focus.
+                </span>
+              </div>
+            </div>
           </div>
 
           {/* Chat messages */}
-          <div className="flex-1 space-y-4 overflow-y-auto bg-slate-50 p-4">
-            {messages.map((message, index) => (
-              <div
-                key={index}
-                className={`flex ${
-                  message.role === "user" ? "justify-end" : "justify-start"
-                }`}
-              >
-                <div
-                  className={`max-w-[85%] rounded-3xl px-4 py-3 text-sm leading-6 ${
-                    message.role === "user"
-                      ? "bg-indigo-600 text-white"
-                      : "border border-slate-200 bg-white text-slate-700"
-                  }`}
-                >
-                  <p className="whitespace-pre-wrap">{message.text}</p>
+          <div className="relative flex-1 overflow-hidden bg-gradient-to-b from-slate-50 to-white">
+            <div className="pointer-events-none absolute -left-20 top-20 h-44 w-44 rounded-full bg-violet-100 blur-3xl"></div>
+            <div className="pointer-events-none absolute -right-24 bottom-20 h-52 w-52 rounded-full bg-orange-100 blur-3xl"></div>
 
-                  {message.source === "local-summary" && (
-                    <p className="mt-2 text-xs text-amber-600">
-                      Local summary mode
-                    </p>
-                  )}
-                </div>
-              </div>
-            ))}
+            <div className="relative h-full space-y-5 overflow-y-auto px-4 py-5">
+              {messages.map((message, index) => {
+                const isUser = message.role === "user";
 
-            {loading && (
-              <div className="flex justify-start">
-                <div className="flex items-center gap-2 rounded-3xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-500">
-                  <Loader2 className="animate-spin" size={16} />
-                  Thinking...
+                return (
+                  <div
+                    key={index}
+                    className={`flex items-end gap-2 ${
+                      isUser ? "justify-end" : "justify-start"
+                    }`}
+                  >
+                    {!isUser && (
+                      <div className="mb-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-orange-400 text-white shadow-md">
+                        <Bot size={16} />
+                      </div>
+                    )}
+
+                    <div
+                      className={`max-w-[82%] rounded-[1.4rem] px-4 py-3 text-sm leading-6 shadow-sm ${
+                        isUser
+                          ? "rounded-br-md bg-gradient-to-br from-violet-600 to-fuchsia-600 text-white shadow-violet-200"
+                          : "rounded-bl-md border border-slate-200/80 bg-white/95 text-slate-700 shadow-slate-200/70"
+                      }`}
+                    >
+                      <SafeAIMessage text={message.text} isUser={isUser} />
+                    </div>
+
+                    {isUser && (
+                      <div className="mb-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-2xl bg-slate-900 text-white shadow-md">
+                        <UserRound size={16} />
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+
+              {loading && (
+                <div className="flex items-end gap-2">
+                  <div className="mb-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-orange-400 text-white shadow-md">
+                    <Bot size={16} />
+                  </div>
+
+                  <div className="rounded-[1.4rem] rounded-bl-md border border-slate-200 bg-white px-4 py-3 shadow-sm">
+                    <div className="flex items-center gap-3 text-sm text-slate-500">
+                      <Loader2
+                        className="animate-spin text-violet-600"
+                        size={17}
+                      />
+                      <span>Analyzing reports...</span>
+                    </div>
+
+                    <div className="mt-2 flex gap-1.5">
+                      <span className="h-2 w-2 animate-bounce rounded-full bg-violet-400"></span>
+                      <span className="h-2 w-2 animate-bounce rounded-full bg-fuchsia-400 [animation-delay:120ms]"></span>
+                      <span className="h-2 w-2 animate-bounce rounded-full bg-orange-400 [animation-delay:240ms]"></span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+
+              <div ref={messagesEndRef}></div>
+            </div>
           </div>
 
-          {/* Suggestions */}
-          <div className="border-t border-slate-200 bg-white p-4">
-            <div className="mb-3 flex items-center gap-2 text-xs font-semibold text-slate-500">
-              <Sparkles size={14} />
-              Suggested questions
+          {/* Suggestions and input */}
+          <div className="border-t border-slate-200/80 bg-white/95 p-4 backdrop-blur-xl">
+            <div className="mb-3 flex items-center justify-between">
+              <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+                <Sparkles size={14} className="text-violet-500" />
+                Suggested questions
+              </div>
+
+              <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-semibold text-slate-500">
+                Weekly reports
+              </span>
             </div>
 
-            <div className="mb-4 flex flex-wrap gap-2">
+            <div className="mb-4 flex gap-2 overflow-x-auto pb-1">
               {suggestions.map((item) => (
                 <button
                   key={item}
                   onClick={() => sendQuestion(item)}
                   disabled={loading}
-                  className="rounded-full bg-slate-100 px-3 py-2 text-xs font-medium text-slate-600 transition hover:bg-indigo-50 hover:text-indigo-700 disabled:opacity-60"
+                  className="shrink-0 rounded-full border border-slate-200 bg-slate-50 px-3.5 py-2 text-xs font-semibold text-slate-600 transition hover:-translate-y-0.5 hover:border-violet-200 hover:bg-violet-50 hover:text-violet-700 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {item}
                 </button>
@@ -196,7 +270,7 @@ export default function AIChatWidget({ weekStart }) {
             </div>
 
             {/* Input */}
-            <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 focus-within:border-indigo-500">
+            <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 p-2 shadow-inner transition focus-within:border-violet-500 focus-within:bg-white focus-within:ring-4 focus-within:ring-violet-100">
               <input
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
@@ -206,24 +280,107 @@ export default function AIChatWidget({ weekStart }) {
                   }
                 }}
                 placeholder="Ask about team reports..."
-                className="flex-1 bg-transparent text-sm outline-none"
+                className="min-w-0 flex-1 bg-transparent px-2 text-sm text-slate-700 outline-none placeholder:text-slate-400"
               />
 
               <button
                 onClick={() => sendQuestion()}
                 disabled={loading}
-                className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-600 text-white transition hover:bg-indigo-700 disabled:opacity-60"
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 via-fuchsia-500 to-orange-400 text-white shadow-lg shadow-violet-200 transition hover:-translate-y-0.5 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {loading ? (
-                  <Loader2 className="animate-spin" size={17} />
+                  <Loader2 className="animate-spin" size={18} />
                 ) : (
-                  <Send size={17} />
+                  <Send size={18} />
                 )}
               </button>
             </div>
+
+            <p className="mt-3 text-center text-[11px] text-slate-400">
+              AI answers are generated from selected weekly report data.
+            </p>
           </div>
         </div>
       )}
     </>
+  );
+}
+
+function SafeAIMessage({ text, isUser }) {
+ 
+  // Removes markdown symbols like **bold**
+  
+  const cleanText = String(text || "")
+    .replace(/\*\*/g, "")
+    .replace(/__/g, "")
+    .replace(/^#{1,6}\s?/gm, "")
+    .trim();
+
+  const lines = cleanText.split("\n");
+
+  return (
+    <div className="space-y-2">
+      {lines.map((line, index) => {
+        const trimmedLine = line.trim();
+
+        if (!trimmedLine) {
+          return <div key={index} className="h-1" />;
+        }
+
+        const isBullet =
+          trimmedLine.startsWith("- ") ||
+          trimmedLine.startsWith("• ") ||
+          /^\d+\.\s/.test(trimmedLine);
+
+        const isTitle =
+          !isUser && trimmedLine.endsWith(":") && trimmedLine.length <= 70;
+
+        if (isBullet) {
+          const bulletText = trimmedLine
+            .replace(/^-\s/, "")
+            .replace(/^•\s/, "")
+            .replace(/^\d+\.\s/, "");
+
+          return (
+            <div
+              key={index}
+              className={`flex gap-2 ${
+                isUser ? "text-white" : "text-slate-700"
+              }`}
+            >
+              <span
+                className={`mt-2 h-1.5 w-1.5 shrink-0 rounded-full ${
+                  isUser ? "bg-white/80" : "bg-violet-500"
+                }`}
+              ></span>
+
+              <p className="text-sm leading-6">{bulletText}</p>
+            </div>
+          );
+        }
+
+        if (isTitle) {
+          return (
+            <p
+              key={index}
+              className="mt-3 rounded-xl bg-gradient-to-r from-violet-50 to-orange-50 px-3 py-2 text-sm font-semibold text-violet-700 ring-1 ring-violet-100"
+            >
+              {trimmedLine.replace(":", "")}
+            </p>
+          );
+        }
+
+        return (
+          <p
+            key={index}
+            className={`text-sm leading-6 ${
+              isUser ? "text-white" : "text-slate-700"
+            }`}
+          >
+            {trimmedLine}
+          </p>
+        );
+      })}
+    </div>
   );
 }

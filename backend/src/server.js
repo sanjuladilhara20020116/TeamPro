@@ -31,8 +31,11 @@ app.use(
   })
 );
 
-// Allow backend to read JSON data from request body
-app.use(express.json());
+// Increase JSON body limit for profile photo Base64 upload
+app.use(express.json({ limit: "10mb" }));
+
+// Increase URL encoded body limit also
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 // Test route to check backend is working
 app.get("/", (req, res) => {
