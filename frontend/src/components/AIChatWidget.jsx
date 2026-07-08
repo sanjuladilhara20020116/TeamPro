@@ -307,10 +307,9 @@ export default function AIChatWidget({ weekStart }) {
 }
 
 function SafeAIMessage({ text, isUser }) {
-  // Safe mode:
+ 
   // Removes markdown symbols like **bold**
-  // Does not use dangerouslySetInnerHTML
-  // Renders text safely as normal React content
+  
   const cleanText = String(text || "")
     .replace(/\*\*/g, "")
     .replace(/__/g, "")

@@ -53,6 +53,11 @@ bio: {
   trim: true,
 },
 
+profilePhoto: {
+  type: String,
+  default: "",
+},
+
     // Projects assigned to this user
     assignedProjects: [
       {

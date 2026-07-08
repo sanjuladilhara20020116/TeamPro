@@ -34,7 +34,7 @@ const updateProfile = async (req, res) => {
       });
     }
 
-    const { name, email, jobTitle, department, bio } = req.body;
+    const { name, email, jobTitle, department, bio,profilePhoto  } = req.body;
 
     const user = await User.findById(req.user._id);
 
@@ -63,7 +63,7 @@ const updateProfile = async (req, res) => {
     user.jobTitle = jobTitle !== undefined ? jobTitle : user.jobTitle;
     user.department = department !== undefined ? department : user.department;
     user.bio = bio !== undefined ? bio : user.bio;
-
+    user.profilePhoto =profilePhoto !== undefined ? profilePhoto : user.profilePhoto;
     await user.save();
 
     const updatedUser = await User.findById(user._id).select("-password");

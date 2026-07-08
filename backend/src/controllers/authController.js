@@ -136,6 +136,7 @@ const loginUser = async (req, res) => {
         jobTitle: user.jobTitle || "",
         department: user.department || "",
         bio: user.bio || "",
+        profilePhoto: user.profilePhoto || "",
       },
     });
   } catch (error) {
