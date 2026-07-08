@@ -126,16 +126,11 @@ export default function Home() {
                 to="/register"
                 className="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-500 to-cyan-400 px-7 py-4 font-bold text-white shadow-2xl shadow-cyan-500/20 transition hover:-translate-y-1"
               >
-                Start Demo
+                Let's Start 
                 <ArrowRight size={19} />
               </Link>
 
-              <Link
-                to="/login"
-                className="inline-flex items-center justify-center rounded-2xl border border-white/20 bg-white/10 px-7 py-4 font-bold text-white backdrop-blur-md transition hover:bg-white/20"
-              >
-                Login
-              </Link>
+              
             </div>
 
             <div className="mt-12 grid max-w-xl grid-cols-3 gap-4">
