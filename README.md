@@ -1,4 +1,7 @@
 # 📊 TeamPro - Weekly Report Generator & Team Dashboard
+<p align="center">
+  <img src="frontend\public\images\teamproLogo2.png" alt="TeamPro Banner" width="50%" hieght="50%" />
+</p>
 
 TeamPro is a full-stack MERN web application built for weekly work reporting and team progress analysis. Team members can create and submit structured weekly reports, while managers can view reports across the team using filters, submission status tracking, dashboard metrics, charts, and an optional AI assistant.
 
