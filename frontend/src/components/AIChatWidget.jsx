@@ -22,7 +22,7 @@ export default function AIChatWidget({ weekStart }) {
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      text: "Hi, I am TeamPro AI. Ask me about team progress, blockers, workload, or weekly reports.",
+      text: "Hi!!! 👋🏼    I'm TeamPro AI 🤖.                                    Ask me about team progress, blockers, workload, or weekly reports.",
     },
   ]);
 
@@ -203,7 +203,7 @@ export default function AIChatWidget({ weekStart }) {
                           : "rounded-bl-md border border-slate-200/80 bg-white/95 text-slate-700 shadow-slate-200/70"
                       }`}
                     >
-                      <p className="whitespace-pre-wrap">{message.text}</p>
+                      <SafeAIMessage text={message.text} isUser={isUser} />
                     </div>
 
                     {isUser && (
@@ -303,5 +303,85 @@ export default function AIChatWidget({ weekStart }) {
         </div>
       )}
     </>
+  );
+}
+
+function SafeAIMessage({ text, isUser }) {
+  // Safe mode:
+  // Removes markdown symbols like **bold**
+  // Does not use dangerouslySetInnerHTML
+  // Renders text safely as normal React content
+  const cleanText = String(text || "")
+    .replace(/\*\*/g, "")
+    .replace(/__/g, "")
+    .replace(/^#{1,6}\s?/gm, "")
+    .trim();
+
+  const lines = cleanText.split("\n");
+
+  return (
+    <div className="space-y-2">
+      {lines.map((line, index) => {
+        const trimmedLine = line.trim();
+
+        if (!trimmedLine) {
+          return <div key={index} className="h-1" />;
+        }
+
+        const isBullet =
+          trimmedLine.startsWith("- ") ||
+          trimmedLine.startsWith("• ") ||
+          /^\d+\.\s/.test(trimmedLine);
+
+        const isTitle =
+          !isUser && trimmedLine.endsWith(":") && trimmedLine.length <= 70;
+
+        if (isBullet) {
+          const bulletText = trimmedLine
+            .replace(/^-\s/, "")
+            .replace(/^•\s/, "")
+            .replace(/^\d+\.\s/, "");
+
+          return (
+            <div
+              key={index}
+              className={`flex gap-2 ${
+                isUser ? "text-white" : "text-slate-700"
+              }`}
+            >
+              <span
+                className={`mt-2 h-1.5 w-1.5 shrink-0 rounded-full ${
+                  isUser ? "bg-white/80" : "bg-violet-500"
+                }`}
+              ></span>
+
+              <p className="text-sm leading-6">{bulletText}</p>
+            </div>
+          );
+        }
+
+        if (isTitle) {
+          return (
+            <p
+              key={index}
+              className="mt-3 rounded-xl bg-gradient-to-r from-violet-50 to-orange-50 px-3 py-2 text-sm font-semibold text-violet-700 ring-1 ring-violet-100"
+            >
+              {trimmedLine.replace(":", "")}
+            </p>
+          );
+        }
+
+        return (
+          <p
+            key={index}
+            className={`text-sm leading-6 ${
+              isUser ? "text-white" : "text-slate-700"
+            }`}
+          >
+            {trimmedLine}
+          </p>
+        );
+      })}
+    </div>
   );
 }
